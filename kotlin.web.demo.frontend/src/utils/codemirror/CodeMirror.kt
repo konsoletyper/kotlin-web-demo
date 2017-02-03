@@ -21,6 +21,7 @@ import org.w3c.dom.HTMLElement
 import org.w3c.dom.HTMLTextAreaElement
 import kotlin.js.Json
 
+@JsModule("codemirror")
 external class CodeMirror(element: HTMLElement, parameters: Json) {
     companion object {
         val hint: dynamic
@@ -82,7 +83,7 @@ external class CodeMirror(element: HTMLElement, parameters: Json) {
     fun indentLine(lineNo: Int)
     fun operation(function: () -> Unit)
     fun swapDoc(document: Doc)
-    fun openDialog(template: HTMLElement, callback: () -> Unit, options: dynamic): (() -> Unit)
+    fun openDialog(template: HTMLElement, callback: () -> Unit, options: dynamic): () -> Unit
     fun addLineWidget(lineNo: Int, help: HTMLElement?, options: Json): Unit
     fun setSelection(anchor: Position, head: Position): Unit
     fun getLineHandle(i: Int): Line
@@ -91,13 +92,13 @@ external class CodeMirror(element: HTMLElement, parameters: Json) {
     fun listSelections(): Array<Selection>
 }
 
-data class Position(val line: Int, val ch: Int)
+class Position(val line: Int, val ch: Int)
 
-data class Range(val from: Position, val to: Position)
+class Range(val from: Position, val to: Position)
 
-data class Selection(val anchor: Position, val head: Position)
+class Selection(val anchor: Position, val head: Position)
 
-data class Coordinates(val left: Double, val top: Double)
+class Coordinates(val left: Double, val top: Double)
 
 external interface Token {
     val start: Int
@@ -107,7 +108,7 @@ external interface Token {
     val state: dynamic
 }
 
-data class Hint(val from: Position, val to: Position, var list: Array<CompletionView>)
+class Hint(val from: Position, val to: Position, var list: Array<CompletionView>)
 
 
 external interface CompletionView {

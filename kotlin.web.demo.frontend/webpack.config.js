@@ -1,4 +1,6 @@
 var webpack = require('webpack');
+var webpackUglifyJsPlugin = require('webpack-uglify-js-plugin');
+var path = require("path");
 
 var webpackConfig = {
     entry: {
@@ -17,14 +19,24 @@ var webpackConfig = {
         loaders: [
             {
                 test: /\.css$/,
-                loaders: [
-                    'style',
-                    'css',
-                    'postcss?pack=circlet'
-                ]
+                loader: 'style-loader!css-loader'
             }
         ]
-    }
+    },
+    plugins: [
+        new webpackUglifyJsPlugin({
+            cacheFolder: path.resolve(__dirname, 'public/cached_uglify/'),
+            debug: false,
+            minimize: true,
+            sourceMap: false,
+            output: {
+                comments: false
+            },
+            compressor: {
+                warnings: false
+            }
+        })
+    ]
 };
 
 module.exports = webpackConfig;

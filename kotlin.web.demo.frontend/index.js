@@ -1,4 +1,4 @@
-require('kotlin');
-require('kotlinx.html.js');
-require('kotlinx.html.shared');
+require('codemirror/lib/codemirror.css');
+require('codemirror/mode/javascript/javascript');
+require('codemirror/mode/clike/clike');
 require('./build/kotlin.web.demo.frontend');

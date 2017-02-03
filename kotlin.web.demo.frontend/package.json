@@ -7,6 +7,10 @@
   },
   "dependencies": {
     "bower": "*",
-    "webpack": "1.13.2"
+    "webpack": "1.13.2",
+    "webpack-uglify-js-plugin": "1.1.9",
+    "codemirror": "5.8.0",
+    "style-loader": "0.13.1",
+    "css-loader": "0.26.1"
   }
 }
