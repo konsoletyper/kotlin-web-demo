@@ -16,14 +16,12 @@
 
 package model
 
-import java.util.*
-
 
 class Example(
         id: String,
         name: String,
         parent: Folder,
-        onContentLoaded: (ArrayList<File>) -> Unit,
+        onContentLoaded: (List<File>) -> Unit,
         onContentNotFound: () -> Unit
 ) : Project(ProjectType.EXAMPLE, id, name, parent, {}, onContentLoaded, onContentNotFound) {
     var searchForMain: Boolean = true

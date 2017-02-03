@@ -16,14 +16,12 @@
 
 package model
 
-import java.util.*
-
 
 class PublicLink(
         id: String,
         name: String,
         parent: Folder,
         onFileDeleted: (String) -> Unit,
-        onContentLoaded: (ArrayList<File>) -> Unit,
+        onContentLoaded: (List<File>) -> Unit,
         onContentNotFound: () -> Unit
 ) : Project(ProjectType.PUBLIC_LINK, id, name, parent, onFileDeleted, onContentLoaded, onContentNotFound)

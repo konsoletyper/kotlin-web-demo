@@ -21,17 +21,11 @@ import model.File
 import model.ProjectType
 import model.Task
 import model.UserProject
-import org.w3c.dom.HTMLDivElement
-import org.w3c.dom.HTMLElement
-import org.w3c.dom.HTMLSelectElement
-import org.w3c.dom.StorageEvent
+import org.w3c.dom.*
 import org.w3c.dom.events.KeyboardEvent
 import providers.*
 import utils.*
 import utils.jquery.jq
-import utils.jquery.on
-import utils.jquery.trigger
-import utils.jquery.ui.tabs
 import views.*
 import views.dialogs.ConverterView
 import views.dialogs.IframeDialog
@@ -44,7 +38,6 @@ import views.tabs.GeneratedCodeView
 import views.tabs.JUnitView
 import views.tabs.ProblemsView
 import views.tree.AccordionView
-import java.util.*
 import kotlin.browser.document
 import kotlin.browser.localStorage
 import kotlin.browser.window
@@ -268,7 +261,7 @@ object Application {
     private val converterProvider = ConverterProvider()
     private val converterView = ConverterView(converterProvider)
 
-    private val iframeDialogs = HashMap<String, IframeDialog>()
+    private val iframeDialogs = mutableMapOf<String, IframeDialog>()
     fun getIframeDialog(kotlinVersion: String): IframeDialog {
         val iframeDialog = iframeDialogs.get(kotlinVersion) ?: throw Throwable("No such kotlin version: $kotlinVersion")
         return iframeDialog
@@ -521,7 +514,7 @@ object Application {
     }
 }
 
-@native interface KotlinWrapperConfig {
+external interface KotlinWrapperConfig {
     val version: String
     val latestStable: Boolean
     val obsolete: Boolean

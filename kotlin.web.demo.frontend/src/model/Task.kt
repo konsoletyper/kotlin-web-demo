@@ -16,26 +16,18 @@
 
 package model
 
-import org.w3c.dom.HTMLDivElement
-import org.w3c.dom.HTMLElement
-import org.w3c.dom.HTMLPreElement
 import utils.Listenable
 import utils.VarListener
-import utils.jquery.JQuery
-import utils.jquery.find
-import utils.jquery.toArray
-import java.util.ArrayList
-import kotlin.browser.document
 import kotlin.properties.Delegates
 
 
-public class Task(
+class Task(
         id: String,
         name: String,
         completed: Boolean,
         parent: Folder,
         onFileDeleted: (String) -> Unit,
-        onContentLoaded: (ArrayList<File>) -> Unit,
+        onContentLoaded: (List<File>) -> Unit,
         onContentNotFound: () -> Unit
 ) : Project(ProjectType.TASK, id, name, parent, onFileDeleted, onContentLoaded, onContentNotFound) {
     val completedListener =  VarListener<Boolean>()
@@ -54,7 +46,7 @@ public class Task(
     }
 }
 
-@native interface TaskWindow {
+external interface TaskWindow {
     val line: Int;
     val start: Int;
     val length: Int;

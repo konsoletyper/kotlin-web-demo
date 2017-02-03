@@ -19,7 +19,8 @@ package model
 import application.Application
 import utils.Listenable
 import utils.VarListener
-import java.util.ArrayList
+import kotlin.js.Json
+import kotlin.js.json
 
 abstract class Project(
         val type: ProjectType,
@@ -27,7 +28,7 @@ abstract class Project(
         name: String,
         val parent: Folder,
         private val onFileDeleted: (String) -> Unit,
-        private val onContentLoaded: (ArrayList<File>) -> Unit,
+        private val onContentLoaded: (List<File>) -> Unit,
         private val onContentNotFound: () -> Unit
 ) {
     fun toJSON(): Json {

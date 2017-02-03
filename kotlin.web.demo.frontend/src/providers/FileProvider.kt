@@ -17,14 +17,15 @@
 package providers
 
 import model.File
-import model.Project
 import model.ProjectType
 import model.UserProject
+import org.w3c.dom.set
 import utils.addKotlinExtension
 import utils.blockContent
 import utils.unBlockContent
 import views.ActionStatusMessage
 import kotlin.browser.localStorage
+import kotlin.js.json
 
 class FileProvider(
         private val onFail: (String, ActionStatusMessage) -> Unit,

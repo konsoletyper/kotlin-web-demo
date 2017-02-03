@@ -79,6 +79,7 @@ configure([
     apply plugin: 'kotlin'
     dependencies {
         compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+        compile "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
         compile "com.fasterxml.jackson.module:jackson-module-kotlin:2.7.4"
     }
 }
@@ -109,26 +110,26 @@ for (config in kotlinConfigs) {
             }
         }
         configurations {
-            kotlin
+            kotlin1
             kotlinJS
         }
 
         dependencies {
             compile project(":kotlin.web.demo.backend:compilers")
-            kotlin tc("$buildType:$build:internal/kotlin-compiler-before-shrink.jar")
-            kotlin tc("$buildType:$build:kotlin-plugin-${pluginBuild}.zip!/Kotlin/lib/kotlin-plugin.jar")
-            kotlin tc("$buildType:$build:kotlin-plugin-${pluginBuild}.zip!/Kotlin/kotlinc/lib/kotlin-runtime.jar")
-            kotlin tc("$buildType:$build:kotlin-plugin-${pluginBuild}.zip!/Kotlin/kotlinc/lib/kotlin-reflect.jar")
-            kotlin tc("$buildType:$build:kotlin-plugin-${pluginBuild}.zip!/Kotlin/kotlinc/lib/kotlin-test.jar")
-            kotlin tc("$buildType:$build:kotlin-plugin-${pluginBuild}.zip!/Kotlin/kotlinc/lib/kotlin-jslib.jar")
+            kotlin1 tc("$buildType:$build:internal/kotlin-compiler-before-shrink.jar")
+            kotlin1 tc("$buildType:$build:kotlin-plugin-${pluginBuild}.zip!/Kotlin/lib/kotlin-plugin.jar")
+            kotlin1 tc("$buildType:$build:kotlin-plugin-${pluginBuild}.zip!/Kotlin/kotlinc/lib/kotlin-runtime.jar")
+            kotlin1 tc("$buildType:$build:kotlin-plugin-${pluginBuild}.zip!/Kotlin/kotlinc/lib/kotlin-reflect.jar")
+            kotlin1 tc("$buildType:$build:kotlin-plugin-${pluginBuild}.zip!/Kotlin/kotlinc/lib/kotlin-test.jar")
+            kotlin1 tc("$buildType:$build:kotlin-plugin-${pluginBuild}.zip!/Kotlin/kotlinc/lib/kotlin-jslib.jar")
             if (config.hasScriptJar) {
-                kotlin tc("$buildType:$build:kotlin-plugin-${pluginBuild}.zip!/Kotlin/kotlinc/lib/kotlin-script-runtime.jar")
+                kotlin1 tc("$buildType:$build:kotlin-plugin-${pluginBuild}.zip!/Kotlin/kotlinc/lib/kotlin-script-runtime.jar")
             }
             if(!version.startsWith("1.0")) {
-                kotlin "org.jetbrains.kotlinx:kotlinx-coroutines-core:0.14"
+                kotlin1 "org.jetbrains.kotlinx:kotlinx-coroutines-core:0.14"
             }
             if(config.stdlibVersion) {
-                kotlin group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib-jre8', version: config.stdlibVersion
+                kotlin1 group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib-jre8', version: config.stdlibVersion
             }
 
             kotlinJS tc("$buildType:$build:kotlin-plugin-${pluginBuild}.zip!/Kotlin/kotlinc/lib/kotlin-jslib.jar")
@@ -143,7 +144,7 @@ task copyKotlinLibs() {
     for (kotlinVersion in kotlinVersions) {
         def wrapperProject = project(":kotlin.web.demo.backend:compilers:versions:$kotlinVersion")
         copy {
-            from wrapperProject.configurations.kotlin
+            from wrapperProject.configurations.kotlin1
             into wrapperProject.projectDir.toString() + File.separator + "kotlin"
         }
         copy {
@@ -177,7 +178,7 @@ project("kotlin.web.demo.backend") {
             from(wrapperProject.configurations['kotlinJS'].collect { zipTree(it) }) {
                 into "WEB-INF/kotlin-wrappers/$kotlinVersion/js"
             }
-            from(wrapperProject.configurations['kotlin']) {
+            from(wrapperProject.configurations['kotlin1']) {
                 into "WEB-INF/kotlin-wrappers/$kotlinVersion/kotlin"
             }
         }
@@ -208,8 +209,8 @@ project(':kotlin.web.demo.frontend') {
     }
 
     dependencies {
-        compile "org.jetbrains.kotlin:kotlin-js-library:$kotlinVersion"
-        compile "org.jetbrains.kotlinx:kotlinx.html.js:0.5.12"
+        compile "org.jetbrains.kotlin:kotlin-stdlib-js:$kotlinVersion"
+        compile "org.jetbrains.kotlinx:kotlinx-html-js:0.6.1-SNAPSHOT"
     }
 
     sourceSets {
@@ -245,8 +246,7 @@ project(':kotlin.web.demo.frontend') {
                 into "${buildDir}/libs"
                 include { fileTreeElement ->
                     def path = fileTreeElement.path
-                    path.endsWith(".js") && !path.endsWith(".meta.js") &&
-                            (path.startsWith("META-INF/resources/") || !path.startsWith("META-INF/"))
+                    path.endsWith(".js") && !path.endsWith(".meta.js")
                 }
             }
         }
@@ -309,7 +309,7 @@ project('kotlin.web.demo.test') {
         testCompile project(':kotlin.web.demo.backend:compilers')
         testCompile project(':kotlin.web.demo.backend')
         testCompile project(':kotlin.web.demo.server')
-        testCompile group: 'org.jetbrains.kotlin', 'name': 'kotlin-test', 'version': '1.0.1-2'
+        testCompile group: 'org.jetbrains.kotlin', 'name': 'kotlin-test', 'version': "$kotlinVersion"
         testCompile group: 'junit', 'name': 'junit', 'version': '4.12'
     }
     for (kotlinVersion in kotlinVersions) {

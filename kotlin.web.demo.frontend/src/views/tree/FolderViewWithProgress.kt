@@ -17,8 +17,7 @@
 package views.tree
 
 import application.Application
-import kotlinx.html.colorInput
-import kotlinx.html.div
+import kotlinx.html.classes
 import kotlinx.html.dom.append
 import kotlinx.html.dom.create
 import kotlinx.html.js.div
@@ -29,11 +28,12 @@ import model.Project
 import model.Task
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLElement
-import utils.jquery.circleProgress
 import utils.jquery.jq
 import views.dialogs.TweetDialog
 import kotlin.browser.document
 import kotlin.dom.addClass
+import kotlin.js.Math
+import kotlin.js.json
 
 
 class FolderViewWithProgress(parentNode: HTMLElement,

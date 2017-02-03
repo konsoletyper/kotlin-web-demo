@@ -20,7 +20,6 @@ import utils.Listenable
 import utils.VarListener
 import utils.addKotlinExtension
 import views.dialogs.ValidationResult
-import java.util.*
 
 
 open class UserProject(
@@ -29,7 +28,7 @@ open class UserProject(
         parent: Folder,
         type: ProjectType,
         onFileDeleted: (String) -> Unit,
-        onContentLoaded: (ArrayList<File>) -> Unit,
+        onContentLoaded: (List<File>) -> Unit,
         onContentNotFound: () -> Unit,
         val onFileAdded: (File) -> Unit
 ) : Project(type, id, name, parent, onFileDeleted, onContentLoaded, onContentNotFound) {

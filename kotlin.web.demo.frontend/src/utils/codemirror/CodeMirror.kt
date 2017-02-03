@@ -19,77 +19,76 @@ package utils.codemirror
 import org.w3c.dom.HTMLCollection
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.HTMLTextAreaElement
-import org.w3c.dom.events.Event
+import kotlin.js.Json
 
-@native
-class CodeMirror(element: HTMLElement, parameters: Json) {
-    companion object CodeMirror {
-        val hint: dynamic = noImpl
-        val commands: dynamic = noImpl
-        fun runMode(text: String, mode: String, outputElement: HTMLElement): Unit = noImpl
-        fun fromTextArea(textArea: HTMLTextAreaElement, json: Json): utils.codemirror.CodeMirror = noImpl
-        fun registerHelper(type: String, name: String, value: Any): Unit = noImpl
-        fun on(obj: Any, action: String, callback: () -> Unit): Unit = noImpl
-        fun colorize(elements: HTMLCollection): Unit = noImpl
+external class CodeMirror(element: HTMLElement, parameters: Json) {
+    companion object {
+        val hint: dynamic
+        val commands: dynamic
+        fun runMode(text: String, mode: String, outputElement: HTMLElement)
+        fun fromTextArea(textArea: HTMLTextAreaElement, json: Json): CodeMirror
+        fun registerHelper(type: String, name: String, value: Any)
+        fun on(obj: Any, action: String, callback: () -> Unit)
+        fun colorize(elements: HTMLCollection)
     }
 
-    class Doc(text: String, mode: String = "", firstLineNumber: Int = 1) {
-        fun markText(start: Position, end: Position, json: Json): Any = noImpl
-        fun getEditor(): utils.codemirror.CodeMirror = noImpl
-        fun addLineWidget(lineNo: Int, help: HTMLElement?, options: Json): LineWidget = noImpl
-        fun setSelection(anchor: Position, head: Position): Unit = noImpl
+    class Doc(text: String, mode: String = definedExternally, firstLineNumber: Int = definedExternally) {
+        fun markText(start: Position, end: Position, json: Json): Any
+        fun getEditor(): CodeMirror
+        fun addLineWidget(lineNo: Int, help: HTMLElement?, options: Json): LineWidget
+        fun setSelection(anchor: Position, head: Position)
     }
 
     class LineWidget {
-        val node: HTMLElement = noImpl
-        val line: Line = noImpl
-        fun clear(): Unit = noImpl
-        fun changed(): Unit = noImpl
+        val node: HTMLElement
+        val line: Line
+        fun clear()
+        fun changed()
     }
 
     class Line {
-        val widgets: Array<LineWidget>? = noImpl
-        fun lineNo(): Int = noImpl
+        val widgets: Array<LineWidget>?
+        fun lineNo(): Int
     }
 
     class TextMarker {
-        val className: String? = noImpl
-        fun find(): Range = noImpl
-        fun clear(): Unit = noImpl
+        val className: String?
+        fun find(): Range
+        fun clear()
     }
 
-    fun getCursor(): Position = noImpl
-    fun getDoc(): Doc = noImpl
-    fun getTokenAt(pos: Position): Token = noImpl
-    fun replaceRange(replacement: String, from: Position, to: Position = from, origin: String? = null): Unit = noImpl
-    fun execCommand(s: String): Unit = noImpl
-    fun on(action: String, callback: (utils.codemirror.CodeMirror) -> Unit): Unit = noImpl
-    fun <T> on(action: String, callback: (utils.codemirror.CodeMirror, additionalInfo: T) -> Unit): Unit = noImpl
-    fun getValue(): String = noImpl
-    fun setOption(name: String, value: Any): Unit = noImpl
-    fun refresh(): Unit = noImpl
-    fun setCursor(lineNo: Int, charNo: Int): Unit = noImpl
-    fun focus(): Unit = noImpl
-    fun setValue(text: String): Unit = noImpl
-    fun setHistory(history: dynamic): Unit = noImpl
-    fun getHistory(): dynamic = noImpl
-    fun clearHistory(): Unit = noImpl
-    fun cursorCoords(): dynamic = noImpl
-    fun clearGutter(gutter: String): Unit = noImpl
-    fun markText(start: Position, end: Position, json: Json): Any = noImpl
-    fun setGutterMarker(line: Int, gutter: String, element: HTMLElement): Unit = noImpl
-    fun lineInfo(line: Int): dynamic = noImpl
-    fun lineCount(): Int = noImpl
-    fun indentLine(lineNo: Int): Unit = noImpl
-    fun operation(function: () -> Unit): Unit = noImpl
-    fun swapDoc(document: Doc): Unit = noImpl
-    fun openDialog(template: HTMLElement, callback: () -> Unit, options: dynamic): (() -> Unit) = noImpl
-    fun addLineWidget(lineNo: Int, help: HTMLElement?, options: Json): Unit = noImpl
-    fun setSelection(anchor: Position, head: Position): Unit = noImpl
-    fun getLineHandle(i: Int): Line = noImpl
-    fun coordsChar(cursorCoordinates: Coordinates): Position = noImpl
-    fun findMarksAt(position: Position): Array<TextMarker> = noImpl
-    fun listSelections(): Array<Selection> = noImpl
+    fun getCursor(): Position
+    fun getDoc(): Doc
+    fun getTokenAt(pos: Position): Token
+    fun replaceRange(replacement: String, from: Position, to: Position = definedExternally, origin: String? = definedExternally)
+    fun execCommand(s: String)
+    fun on(action: String, callback: (utils.codemirror.CodeMirror) -> Unit)
+    fun <T> on(action: String, callback: (utils.codemirror.CodeMirror, additionalInfo: T) -> Unit)
+    fun getValue(): String
+    fun setOption(name: String, value: Any)
+    fun refresh()
+    fun setCursor(lineNo: Int, charNo: Int)
+    fun focus()
+    fun setValue(text: String)
+    fun setHistory(history: dynamic)
+    fun getHistory(): dynamic
+    fun clearHistory()
+    fun cursorCoords(): dynamic
+    fun clearGutter(gutter: String)
+    fun markText(start: Position, end: Position, json: Json): Any
+    fun setGutterMarker(line: Int, gutter: String, element: HTMLElement): Unit
+    fun lineInfo(line: Int): dynamic
+    fun lineCount(): Int
+    fun indentLine(lineNo: Int)
+    fun operation(function: () -> Unit)
+    fun swapDoc(document: Doc)
+    fun openDialog(template: HTMLElement, callback: () -> Unit, options: dynamic): (() -> Unit)
+    fun addLineWidget(lineNo: Int, help: HTMLElement?, options: Json): Unit
+    fun setSelection(anchor: Position, head: Position): Unit
+    fun getLineHandle(i: Int): Line
+    fun coordsChar(cursorCoordinates: Coordinates): Position
+    fun findMarksAt(position: Position): Array<TextMarker>
+    fun listSelections(): Array<Selection>
 }
 
 data class Position(val line: Int, val ch: Int)
@@ -100,7 +99,7 @@ data class Selection(val anchor: Position, val head: Position)
 
 data class Coordinates(val left: Double, val top: Double)
 
-@native interface Token {
+external interface Token {
     val start: Int
     val end: Int
     val string: String
@@ -111,7 +110,7 @@ data class Coordinates(val left: Double, val top: Double)
 data class Hint(val from: Position, val to: Position, var list: Array<CompletionView>)
 
 
-@native interface CompletionView {
+external interface CompletionView {
     val text: String
     val displayText: String
     fun render(element: HTMLElement, self: dynamic, data: dynamic);
