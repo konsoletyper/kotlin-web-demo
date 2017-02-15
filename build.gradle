@@ -221,7 +221,7 @@ project(':kotlin.web.demo.frontend') {
         }
     }
 
-    compileKotlin2Js{
+    compileKotlin2Js {
         kotlinOptions.outputFile = "${buildDir}/kotlin.web.demo.frontend.js"
         kotlinOptions.moduleKind='commonjs'
     }
@@ -237,18 +237,15 @@ project(':kotlin.web.demo.frontend') {
         download = true
     }
 
-    task copyJsFilesFromDependencies(dependsOn: 'compileKotlin2Js') {
-        configurations.compile.each { File file ->
-            copy {
-                includeEmptyDirs = false
-
-                from zipTree(file.absolutePath)
-                into "${buildDir}/libs"
-                include { fileTreeElement ->
-                    def path = fileTreeElement.path
-                    path.endsWith(".js") && !path.endsWith(".meta.js")
-                }
-            }
+    task copyJsFilesFromDependencies(type: Copy, dependsOn: 'compileKotlin2Js') {
+        into "${buildDir}/libs"
+        includeEmptyDirs = false
+        from {
+            configurations.compile.collect { zipTree(it) }
+        }
+        include {
+            def path = it.path
+            path.endsWith(".js") && !path.endsWith(".meta.js")
         }
     }
 
@@ -283,9 +280,11 @@ project("kotlin.web.demo.server") {
         from("${project(':kotlin.web.demo.frontend').projectDir}/static") {
             into 'static'
         }
-        from("${project(':kotlin.web.demo.frontend').buildDir}") {
+        from("${project(':kotlin.web.demo.frontend').buildDir}/webpack") {
             into 'static'
-            include 'kotlin.web.demo.frontend.js'
+        }
+        from("${project(':kotlin.web.demo.frontend').buildDir}/bower") {
+            into 'static/lib'
         }
         from("${project(':kotlin.web.demo.frontend').projectDir}/index.html")
         from("${rootProject.projectDir}/build.txt")
