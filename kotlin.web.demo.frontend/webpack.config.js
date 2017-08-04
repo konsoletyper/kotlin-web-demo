@@ -30,7 +30,7 @@ var webpackConfig = {
     },
     resolve: {
         extensions: ['', '.js'],
-        modulesDirectories: ['node_modules', './build/libs', './build']
+        modulesDirectories: ['node_modules', './build/js-libs', './build']
     },
     module: {
         loaders: [

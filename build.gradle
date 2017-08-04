@@ -27,7 +27,7 @@ buildscript {
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath "com.moowork.gradle:gradle-node-plugin:0.11"
-        classpath "gradle.plugin.com.github.jk1:tcdeps:0.9.1"
+        classpath "gradle.plugin.com.github.jk1:tcdeps:0.9"
     }
 }
 
@@ -210,7 +210,7 @@ project(':kotlin.web.demo.frontend') {
 
     dependencies {
         compile "org.jetbrains.kotlin:kotlin-stdlib-js:$kotlinVersion"
-        compile "org.jetbrains.kotlinx:kotlinx-html-js:0.6.1-SNAPSHOT"
+        compile "org.jetbrains.kotlinx:kotlinx-html-js:0.6.3"
     }
 
     sourceSets {
@@ -230,7 +230,24 @@ project(':kotlin.web.demo.frontend') {
         script = file('node_modules/bower/bin/bower')
         args = ['install']
     }
-    build.dependsOn('bowerInstall')
+
+    task copyBowerLibs(type: Copy, dependsOn: bowerInstall) {
+        into "${buildDir}/bower-libs"
+        from("${buildDir}/bower/jquery/dist/") {
+            include "jquery.min.js"
+        }
+        from("${buildDir}/bower/jquery-circle-progress/dist/") {
+            include "circle-progress.js"
+        }
+        from("${buildDir}/bower/jquery-ui/") {
+            include "jquery-ui.min.js"
+            include fileTree("themes")
+        }
+        from("${buildDir}/bower/twitter-text/js/pkg") {
+            include "twitter-text-1.13.0.js"
+        }
+    }
+    build.dependsOn('copyBowerLibs')
 
     node {
         version = '4.0.0'
@@ -238,7 +255,7 @@ project(':kotlin.web.demo.frontend') {
     }
 
     task copyJsFilesFromDependencies(type: Copy, dependsOn: 'compileKotlin2Js') {
-        into "${buildDir}/libs"
+        into "${buildDir}/js-libs"
         includeEmptyDirs = false
         from {
             configurations.compile.collect { zipTree(it) }
@@ -283,7 +300,7 @@ project("kotlin.web.demo.server") {
         from("${project(':kotlin.web.demo.frontend').buildDir}/webpack") {
             into 'static'
         }
-        from("${project(':kotlin.web.demo.frontend').buildDir}/bower") {
+        from("${project(':kotlin.web.demo.frontend').buildDir}/bower-libs") {
             into 'static/lib'
         }
         from("${project(':kotlin.web.demo.frontend').projectDir}/index.html")
